@@ -39,6 +39,7 @@ class ImageItem(Base):
     status: Mapped[str] = mapped_column(String(50))
     input_url: Mapped[str] = mapped_column(String(50))
     output_url: Mapped[str] = mapped_column(String(50),nullable=True)
+    item_index : Mapped[str] = mapped_column(String(200))
     csv_request_id = mapped_column(ForeignKey("csv_request.id"))
     
     csv_request: Mapped[CsvRequest] = relationship(back_populates="images")

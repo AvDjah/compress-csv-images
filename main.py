@@ -50,7 +50,7 @@ def process_file(csv_file: UploadFile):
                 session.commit()
                 print(f"Added File: {csv_request}")
                 process_csv.delay(csv_request_guid, csv_request.id)
-                return {"result": "success", "file": csv_request}
+                return {"result": "success", "request_id": csv_request_guid}
         else:
             return {"result": "failure", "message": "Invalid CSV file"}
 
@@ -89,11 +89,11 @@ def delete_all_csv():
 
 @app.get("/check_status/{item_id}")
 async def read_items(
-    item_id: Annotated[int, Path(title="The ID of the item to get")],
+    item_id: Annotated[str, Path(title="The ID of the item to get")],
 ):
     with get_db_session() as session:
         csv_request = session.execute(
-            select(CsvRequest).where(CsvRequest.id == item_id)
+            select(CsvRequest).where(CsvRequest.request_guid == item_id)
         ).scalar_one_or_none()
         
         if csv_request is None:
@@ -102,4 +102,5 @@ async def read_items(
         is_completed = csv_request.status == CsvRequestStatus.COMPLETED.name
         
     return {"item_id": item_id, "is_completed": is_completed}
+
 

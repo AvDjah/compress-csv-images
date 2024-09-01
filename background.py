@@ -90,25 +90,32 @@ def process_csv(csv_name,csv_request_id):
         text_stream = TextIOWrapper(csv_buffer, encoding='utf-8')
         csv_reader = csv.reader(text_stream)
         next(csv_reader, None)
+    
         # Process each row
-        for row in csv_reader:
+        for row_index,row in enumerate(csv_reader):
             image_guid = str(uuid7())
             if len(row) >= 3:
                 print(f"Value in third column: {row[2]}")
-                image_item = ImageItem(
-                    image_guid = image_guid,
-                    image_name = "",
-                    status = ImageItemStatus.PENDING.name,
-                    input_url = str(row[2]),
-                    output_url = "",
-                    csv_request_id = csv_request_id
-                )
-               
-                with get_db_session() as session:
-                    session.add(image_item)
-                    session.commit()
+                
+                input_urls = row[2].split(',')
+                input_index = 0
+                for input_url_index,input_url in enumerate(input_urls):
                     
-                process_image.delay(row[2],image_guid)
+                    image_item = ImageItem(
+                        image_guid = image_guid,
+                        image_name = "",
+                        status = ImageItemStatus.PENDING.name,
+                        input_url = input_url.strip(),
+                        output_url = "",
+                        csv_request_id = csv_request_id,
+                        item_index = f"{row_index}.{input_url_index}"
+                    )
+                   
+                    with get_db_session() as session:
+                        session.add(image_item)
+                        session.commit()
+                        
+                    process_image.delay(input_url.strip(), image_guid)
             else:
                 print(f"Row does not have a third column: {row}")
         
