@@ -46,6 +46,12 @@ def process_image(image_name : str, image_guid : str):
             # Create the directory if it doesn't exist
             os.makedirs(save_dir, exist_ok=True)
 
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir, exist_ok=True)
+                print(f"Created directory: {save_dir}")
+            else:
+                print(f"Directory already exists: {save_dir}")
+            
             # Generate a filename from the URL
             filename = os.path.join(save_dir, os.path.basename(f"{image_guid}.jpeg"))
 

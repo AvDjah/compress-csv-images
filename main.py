@@ -23,7 +23,6 @@ def read_root():
 
 @app.post("/process")
 def process_file(csv_file: UploadFile):
-    global file_path
     try:
         csv_content = csv_file.file.read()
         valid_file = HandleCsv.read_and_validate_csv(csv_content)

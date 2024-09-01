@@ -8,6 +8,15 @@ class FileHandler:
     folder_path = "./files/csv"    
 
     @staticmethod
+    def check_if_path_exists():
+        if not os.path.exists(FileHandler.folder_path):
+            os.makedirs(FileHandler.folder_path, exist_ok=True)
+            print(f"Created directory: {FileHandler.folder_path}")
+        else:
+            print(f"Directory already exists: {FileHandler.folder_path}")
+
+
+    @staticmethod
     def save_file(file_name: str, file_bytes: bytes, file_extension: str = "csv"):
         
         try:
