@@ -24,3 +24,5 @@ __pycache__/
 # Allow requirements.txt
 !requirements.txt
 
+# Allow readme file
+!readme.md
