@@ -21,4 +21,6 @@ __pycache__/
 
 # Don't ignore .gitignore
 !.gitignore
+# Allow requirements.txt
+!requirements.txt
 
