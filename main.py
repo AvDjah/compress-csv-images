@@ -88,7 +88,7 @@ def delete_all_csv():
         return {"failure": e}
 
 
-@app.get("/check_status/")
+@app.get("/check_status/{item_id}")
 async def read_items(
     item_id: Annotated[int, Path(title="The ID of the item to get")],
 ):

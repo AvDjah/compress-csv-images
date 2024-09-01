@@ -38,23 +38,6 @@ def process_image(image_name : str, image_guid : str):
                 print(f"Invalid image: {image_url}")
                 return False
 
-            # Load the image using PIL
-            try:
-                img = Image.open(BytesIO(response.content))
-                img.verify()
-            except Exception:
-                with get_db_session() as session:
-                    session.execute(update(ImageItem).where(ImageItem.image_guid == image_guid).values(status=ImageItemStatus.INVALID.name))
-                    session.commit()
-                return False
-
-            # Generate a filename from the URL
-            filename = os.path.join(save_dir, f"{image_guid}.jpeg")
-
-            # Save the compressed image using PIL
-            img.save(filename, 'JPEG', optimize = True,quality = 95)
-
-            print(f"Image saved: {filename}")
                 
             # imitating image saving logic using sleep            
             sleep_time = random.uniform(3, 7)
@@ -101,9 +84,9 @@ def process_csv(csv_name,csv_request_id):
         text_stream = TextIOWrapper(csv_buffer, encoding='utf-8')
         csv_reader = csv.reader(text_stream)
         next(csv_reader, None)
-        image_guid = str(uuid7())
         # Process each row
         for row in csv_reader:
+            image_guid = str(uuid7())
             if len(row) >= 3:
                 print(f"Value in third column: {row[2]}")
                 image_item = ImageItem(
