@@ -1,0 +1,24 @@
+# Ignore everything
+*
+
+# But not .py files
+!*.py
+
+# Allow .csv files
+!*.csv
+
+# Allow csv_files directory
+!csv_files/
+!csv_files/**
+
+# Ignore specific files and directories
+alembic.ini
+alembic/
+
+# Ignore pycache
+__pycache__/
+*.pyc
+
+# Don't ignore .gitignore
+!.gitignore
+
